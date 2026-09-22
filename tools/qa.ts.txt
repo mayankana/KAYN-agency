@@ -1,0 +1,17 @@
+import { CharacterEngine } from './engine/CharacterEngine';
+import videoSrc from './assets/gecko.mp4';
+import atlasSrc from './assets/eye-atlas.png';
+
+const canvas = document.getElementById('c') as HTMLCanvasElement;
+const video = document.getElementById('v') as HTMLVideoElement;
+video.src = videoSrc;
+const atlas = new Image();
+atlas.src = atlasSrc;
+(async () => {
+  await atlas.decode();
+  await new Promise<void>((r) => (video.readyState >= 2 ? r() : video.addEventListener('loadeddata', () => r(), { once: true })));
+  const eng = new CharacterEngine({ canvas, video, atlas });
+  eng.resize(1740, 1080, 1);
+  (window as any).eng = eng;
+  (window as any).qaReady = true;
+})();
